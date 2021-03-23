@@ -80,7 +80,7 @@ int add_book(Book *pbook, BookArray *pbookarray)
         pb = pb->next;
     }
     pb->next = pbook;
-    bookarray.length++;
+    pbookarray->length++;
     return 0;
 }
 
@@ -90,12 +90,63 @@ int remove_book(Book *pbook, BookArray *pbookarray)
     bp = pbookarray->array;
     for (int i = 0; i < pbookarray->length; i++)
     {
-        if (strcmp(pbook->id, pbookarray->array->id) == 0)//check if there is the same book
+        if (strcmp(pbook->id, bp->id) == 0) //check if there is the same book
         {
-            pbookarray->array = NULL;
+            bp = NULL;
             return 0;
         }
         bp = bp->next;
     }
-    return 1;// if there is no this book
+    return 1; // if there is no this book
+}
+
+BookArray find_book_by_title(const char *title, BookArray *pbookarray)
+{
+    BookArray findbook;
+    findbook.length = 0;
+    for (int i = 0; i < pbookarray->length; i++)
+    {
+        if (strstr(pbookarray->array->title, title) != NULL) //have the same string
+        {
+            findbook.length++;
+            findbook.array = pbookarray->array;
+            findbook.array = findbook.array->nextfind;
+        }
+        pbookarray = pbookarray->next;
+    }
+    return findbook;
+}
+
+BookArray find_book_by_author(const char *author, BookArray *pbookarray)
+{
+    BookArray findbook;
+    findbook.length = 0;
+    for (int i = 0; i < pbookarray->length; i++)
+    {
+        if (strstr(pbookarray->array->authors, author) != NULL) //have the same string
+        {
+            findbook.length++;
+            findbook.array = pbookarray->array;
+            findbook.array = findbook.array->nextfind;
+        }
+        pbookarray = pbookarray->next;
+    }
+    return findbook;
+}
+
+BookArray find_book_by_year(unsigned int year, BookArray *pbookarray)
+{
+    BookArray findbook;
+    findbook.length = 0;
+    for (int i = 0; i < pbookarray->length; i++)
+    {
+        if (pbookarray->array->year == year)
+        {
+            findbook.length++;
+            findbook.array = pbookarray->array;
+            findbook.array = findbook.array->nextfind;
+        }
+        pbookarray = pbookarray->next;
+    }
+    return findbook;
 }
